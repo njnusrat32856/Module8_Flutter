@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<http.Response> _sendDataToBackend(
       String name, email, password, cell, address, gender, dob,
       ) async {
-    const String url = '';
+    const String url = 'http://localhost:8084/register';
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
