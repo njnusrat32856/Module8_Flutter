@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:test_flutter/page/all_hotel_view_page.dart';
 import 'package:test_flutter/page/homepage.dart';
 import 'package:test_flutter/page/registerpage.dart';
 
@@ -15,7 +16,7 @@ class LoginPage extends StatelessWidget {
   final storage = new FlutterSecureStorage();
 
   Future<void> loginUser(BuildContext context) async {
-    final url = Uri.parse('http://localhost:8084/login');
+    final url = Uri.parse('http://localhost:8080/login');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -25,6 +26,7 @@ class LoginPage extends StatelessWidget {
       final responseData = jsonDecode(response.body);
       final token = responseData['token'];
 
+      // decode JWT to get sub and role
       Map<String, dynamic> payload = Jwt.parseJwt(token);
       String sub = payload['sub'];
       String role = payload['role'];
@@ -37,7 +39,7 @@ class LoginPage extends StatelessWidget {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Homepage()),
+        MaterialPageRoute(builder: (context) => AllHotelViewPage()),
       );
     } else {
       print('Login failed with status: ${response.statusCode}');
