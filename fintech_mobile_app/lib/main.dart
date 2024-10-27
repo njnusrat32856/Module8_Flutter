@@ -1,3 +1,4 @@
+import 'package:fintech_mobile_app/page/action_buttons.dart';
 import 'package:fintech_mobile_app/page/credit_card.dart';
 import 'package:flutter/material.dart';
 
@@ -70,6 +71,14 @@ class MyHomePage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(top: 167),
                     color: Colors.white,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 110,),
+                        // Action Buttons
+                        ActionButtons(),
+                        // Transaction List
+                      ],
+                    ),
                   ),
                   Positioned(
                     top: 20,

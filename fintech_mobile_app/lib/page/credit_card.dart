@@ -66,7 +66,8 @@ class CreditCard extends StatelessWidget {
                           '\$10,500.00',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 24
+                              fontSize: 24,
+                            color: Colors.white
                           ),
                         ),
                         Row(
