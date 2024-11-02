@@ -1,3 +1,5 @@
+import 'package:fintech_mobile_app/widgets/time_option_button.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class ActivityPage extends StatelessWidget {
@@ -125,6 +127,16 @@ class ActivityPage extends StatelessWidget {
 
                       ),
                     ),
+                    SizedBox(height: 12,),
+                    TimeOptionsRow(),
+                    SizedBox(height: 16,),
+                    Expanded(
+                        child: LineChart(
+                          LineChartData(
+                            gridData: FlGridData(show: false)
+                          )
+                        ),
+                    )
                   ],
                 ),
               )
