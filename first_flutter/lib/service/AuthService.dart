@@ -56,4 +56,53 @@ class AuthService {
     }
   }
 
+  Future<String?> getTokens() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
+  }
+
+  Future<String?> getUserRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('userRole'));
+    return prefs.getString('userRole');
+  }
+
+  Future<bool> isTokenExprired() async {
+    String? token = await getTokens();
+    if (token != null) {
+      DateTime expiryDate = Jwt.getExpiryDate(token)!;
+      return DateTime.now().isAfter(expiryDate);
+    }
+    return true;
+  }
+
+  Future<bool> isLoggedIn() async {
+    String? token = await getTokens();
+    if (token != null && !(await isTokenExprired())) {
+      return true;
+    } else {
+      await logout();
+      return false;
+    }
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('authToken');
+    await prefs.remove('userRole');
+  }
+
+  Future<bool> hasRole(List<String> roles) async {
+    String? role = await getUserRole();
+    return role != null && roles.contains(role);
+  }
+
+  Future<bool> isAdmin() async {
+    return await hasRole(['ADMIN']);
+  }
+
+  Future<bool> isUser() async {
+    return await hasRole(['USER']);
+  }
+
 }
