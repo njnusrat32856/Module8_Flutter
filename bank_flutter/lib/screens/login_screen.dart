@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
 
 
   Future<void> loginUser(BuildContext context) async {
-    try {
+
       final response = await authService.login(email.text, password.text);
 
       // Successful login, role-based navigation
@@ -35,9 +35,7 @@ class LoginScreen extends StatelessWidget {
       } else {
         print('Unknown role: $role');
       }
-    } catch (error) {
-      print('Login failed: $error');
-    }
+
   }
 
 
