@@ -26,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final TextEditingController address = TextEditingController();
   final TextEditingController nid = TextEditingController();
+  final TextEditingController accountType = TextEditingController();
 
   final DateTimeFieldPickerPlatform dob= DateTimeFieldPickerPlatform.material;
 
@@ -50,9 +51,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       String uNid = nid.text;
       String uGender = selectedGender ?? 'Other';
       String uDob = selectedDOB != null ? selectedDOB!.toIso8601String() : '';
+      String uAccountType = accountType.text;
 
       // Send data to the server
-      final response = await _sendDataToBackend(uFirstName, uLastName, uEmail, uPassword, uMobileNo, uAddress, uNid, uGender, uDob);
+      final response = await _sendDataToBackend(uFirstName, uLastName, uEmail, uPassword, uMobileNo, uAddress, uNid, uGender, uDob, uAccountType);
 
       if (response.statusCode == 201 || response.statusCode == 200  ) {
         // Registration successful
@@ -77,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       String nid,
       String gender,
       String dob,
+      String accountType
       ) async {
 
     const String url = 'http://localhost:8881/register'; // Android emulator
@@ -93,6 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'nid': nid,
         'gender': gender,
         'dob': dob,
+        'accountType': accountType
       }),
     );
     return response;
@@ -170,7 +174,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(
                   height: 20,
-                ),TextField(
+                ),
+                TextField(
                   controller: nid,
                   decoration: InputDecoration(
                       labelText: 'National ID',
@@ -247,6 +252,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: accountType,
+                  decoration: InputDecoration(
+                      labelText: 'Account Type',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.numbers)),
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 ElevatedButton(
                     onPressed: () {

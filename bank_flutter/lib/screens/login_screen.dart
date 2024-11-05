@@ -1,5 +1,6 @@
 import 'package:bank_flutter/screens/admin_dashboard_screen.dart';
 import 'package:bank_flutter/screens/register_screen.dart';
+import 'package:bank_flutter/screens/user_dashboard_screen.dart';
 import 'package:bank_flutter/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -30,7 +31,7 @@ class LoginScreen extends StatelessWidget {
       } else if (role == 'USER') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AdminDashboardScreen()),
+          MaterialPageRoute(builder: (context) => UserDashboardScreen()),
         );
       } else {
         print('Unknown role: $role');
@@ -50,61 +51,67 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: email,
-              decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: password,
-              decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.password)),
-              obscureText: true,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  loginUser(context);
+            Form(
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: email,
+                      decoration: InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.email)),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: password,
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.password)),
+                      obscureText: true,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          loginUser(context);
 
-                },
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontFamily:GoogleFonts.lato().fontFamily
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  foregroundColor: Colors.white,
+                        },
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily:GoogleFonts.lato().fontFamily
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          foregroundColor: Colors.white,
+                        )
+                    ),
+                    SizedBox(height: 20),
+
+                    // Login Text Button
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegisterScreen()),
+                        );
+                      },
+                      child: Text(
+                        'Registration',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    )
+                  ],
                 )
-            ),
-            SizedBox(height: 20),
-
-            // Login Text Button
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterScreen()),
-                );
-              },
-              child: Text(
-                'Registration',
-                style: TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
             )
           ],
         ),
