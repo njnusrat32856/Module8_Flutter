@@ -133,7 +133,39 @@ class ActivityPage extends StatelessWidget {
                     Expanded(
                         child: LineChart(
                           LineChartData(
-                            gridData: FlGridData(show: false)
+                            gridData: FlGridData(show: false),
+                            titlesData: FlTitlesData(
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false
+                                ),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  const tiles =['S','M','T','W','T','F'];
+                                  final index = value.toInt();
+                                  if(index > 0 && index < tiles.length) {
+                                    return Text(
+                                      tiles[index],
+                                      style: TextStyle(
+                                        color: Colors.grey
+                                      ),
+                                    );
+                                  }
+                                  return Text("");
+                                },
+                                reservedSize: 22,
+                                  interval: 1,),
+                              ),
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                            )
                           )
                         ),
                     )
