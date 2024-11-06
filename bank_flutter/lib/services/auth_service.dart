@@ -29,6 +29,9 @@ class AuthService {
       await prefs.setString('authToken', token);
       await prefs.setString('userRole', role);
 
+      // Store user details (You can store a full object or individual fields)
+      await prefs.setString('user', jsonEncode(data['user'])); // Save the full user object as a JSON string
+
       return true;
     } else {
       print('Failed to log in: ${response.body}');
@@ -61,6 +64,17 @@ class AuthService {
   Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('authToken');
+  }
+
+  Future<Map<String, dynamic>?> getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userJson = prefs.getString('user');
+
+    if (userJson != null) {
+      return jsonDecode(userJson); // Parse the JSON string and return as a Map
+    } else {
+      return null; // Return null if no user is found
+    }
   }
 
   Future<String?> getUserRole() async {

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:bank_flutter/models/user.dart';
 import 'package:bank_flutter/screens/admin_dashboard_screen.dart';
 import 'package:bank_flutter/screens/register_screen.dart';
 import 'package:bank_flutter/screens/user_dashboard_screen.dart';
@@ -32,6 +35,7 @@ class LoginScreen extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => UserDashboardScreen()),
+          // MaterialPageRoute(builder: (context) => UserDashboardScreen()),
         );
       } else {
         print('Unknown role: $role');
@@ -46,11 +50,23 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'BMS BanK Ltd.',
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+        automaticallyImplyLeading: false, // Hides the back button
+        backgroundColor: Colors.blue,
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('assets/images/banklogo.png', width: 90, height: 90,),
+            SizedBox(height: 20,),
             Form(
                 child: Column(
                   children: [

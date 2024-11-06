@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
 
-
   @override
   State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-
   PageController pageController = PageController();
   SideMenuController sideMenu = SideMenuController();
 
@@ -28,10 +26,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'BMSBank Dashboard',
-          style: TextStyle(
-            color: Colors.white
-          ),
+          'BMSBank Dashboard',
+          style: TextStyle(color: Colors.white),
         ),
         automaticallyImplyLeading: false, // Hides the back button
         backgroundColor: Colors.blue,
@@ -64,7 +60,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   ),
                   child: Image.asset(
                     'assets/images/banklogo.png',
-
                   ),
                 ),
                 const Divider(
@@ -81,7 +76,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                   child: Text(
                     'Admin',
                     style: TextStyle(fontSize: 15, color: Colors.grey[800]),
@@ -189,26 +184,128 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               // ),
               SideMenuItem(
                 title: 'Logout',
-                icon:  Icon(Icons.exit_to_app),
+                icon: Icon(Icons.exit_to_app),
                 onTap: (int index, SideMenuController controller) {
                   _logout(context);
                 },
               ),
             ],
           ),
-          const VerticalDivider(width: 0,),
+          const VerticalDivider(
+            width: 0,
+          ),
           Expanded(
             child: PageView(
               controller: pageController,
               children: [
                 Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Dashboard',
-                      style: TextStyle(fontSize: 35),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.network(
+                            "https://t3.ftcdn.net/jpg/01/36/33/14/360_F_136331491_vRh0iHpvyi5juqXvbtujaibNIj6Xvyoh.jpg"),
+                        Text(
+                          'Welcome, Admin!',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 20),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.people),
+                          label: Text(
+                            'View Users Accounts',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            // Navigate to users page or call an API to fetch users
+                            print("View Users clicked");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.attach_money),
+                          label: Text(
+                            'Manage Transactions',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            // Navigate to manage hotels page or call an API to manage hotels
+                            print("Manage Hotels clicked");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.approval),
+                          label: Text(
+                            'Approve Or Deny Account',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            // Implement logout functionality or navigate back to login
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => AddHotelPage()),
+                            // ); // Example logout: navigate back to login
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.settings),
+                          label: Text(
+                            'Settings',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            // Navigate to settings page
+                            print("Settings clicked");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        // ElevatedButton(
+                        //   onPressed: () {
+                        //     // Implement logout functionality or navigate back to login
+                        //     Navigator.pushReplacement(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => LoginScreen()),
+                        //     ); // Example logout: navigate back to login
+                        //   },
+                        //   child: Text(
+                        //     'Logout',
+                        //     style: TextStyle(color: Colors.white),
+                        //   ),
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: Colors.redAccent,
+                        //   ),
+                        // ),
+                      ],
                     ),
                   ),
+                  // color: Colors.white,
+                  // child: const Center(
+                  //   child: Text(
+                  //     'Dashboard',
+                  //     style: TextStyle(fontSize: 35),
+                  //   ),
+                  // ),
                 ),
                 Container(
                   color: Colors.white,
@@ -396,7 +493,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()), // Replace with your login page widget
+      MaterialPageRoute(
+          builder: (context) =>
+              LoginScreen()), // Replace with your login page widget
     );
   }
 }
