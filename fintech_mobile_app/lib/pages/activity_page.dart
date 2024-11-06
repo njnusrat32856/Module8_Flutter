@@ -165,12 +165,89 @@ class ActivityPage extends StatelessWidget {
                               topTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
-                            )
+                            ),
+                            borderData: FlBorderData(show: false),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: [
+                                  FlSpot(0, 2),
+                                  FlSpot(1, 1),
+                                  FlSpot(2, 4),
+                                  FlSpot(4, 3),
+                                  FlSpot(5, 4),
+                                  FlSpot(6, 6),
+                                ],
+                                isCurved: true,
+                                color: Colors.teal,
+                                barWidth: 3,
+                                dotData: FlDotData(show:  false),
+                                belowBarData: BarAreaData(
+                                  show: true,
+                                  color: Colors.teal.withOpacity(0.07)
+                                )
+                              )
+                            ]
                           )
                         ),
                     )
                   ],
                 ),
+              ),
+              SizedBox(height: 25,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Transactios",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Transactios",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.teal,
+                      )
+                    ],
+                  )
+                ],
+              ),
+              Column(
+                children: List.generate(
+                    3,
+                        (index) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 239, 243, 245),
+                            child: Icon(
+                                Icons.payment_rounded,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          title: Text(
+                            'Smartpay UI Kit',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
+                          subtitle: Text("ui8.net"),
+                          trailing: Text(
+                            "-\$45.99",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              fontSize: 14
+                            ),
+                          ),
+                        )
+                )
               )
             ],
           ),
