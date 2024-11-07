@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:bank_flutter/models/user.dart';
 import 'package:bank_flutter/screens/deposit_screen.dart';
 import 'package:bank_flutter/screens/login_screen.dart';
+import 'package:bank_flutter/screens/user_profile.dart';
 import 'package:bank_flutter/services/transaction_service.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class UserDashboardScreen extends StatefulWidget {
+
   const UserDashboardScreen({super.key});
 
   @override
@@ -16,6 +18,8 @@ class UserDashboardScreen extends StatefulWidget {
 }
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
+  late final User? user;
+  // final String? errorMessage;
 
   //for deposit
   final TransactionService transactionService = TransactionService();
@@ -29,7 +33,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void makeDeposit() async {
-    if (_formKey.currentState?.validate() ?? false) {
+    if (_formKey.currentState!.validate() ?? false) {
       try {
         await transactionService.depositMoney(userId, amount, description);
         showDialog(
@@ -352,12 +356,37 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 ),
                 Container(
                   color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Users Profile',
-                      style: TextStyle(fontSize: 35),
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          'User Profile',
+                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(height: 5,),
+                      Column(
+                        children: [
+
+                        ],
+                      )
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfile(user: )));
+                      // },
+                      //     child: Text(
+                      //       'View Details'
+                      //     )
+                      // )
+                    ],
                   ),
+                  // child: const Center(
+                  //   child: Text(
+                  //     'Users Profile',
+                  //     style: TextStyle(fontSize: 35),
+                  //   ),
+                  // ),
                 ),
                 Container(
                   padding: EdgeInsets.all(8),
@@ -576,6 +605,25 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       MaterialPageRoute(
           builder: (context) =>
               LoginScreen()), // Replace with your login page widget
+    );
+  }
+
+  // Widget to build individual profile items
+  Widget _buildProfileItem(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 8.0),
+          Expanded(
+            child: Text(value),
+          ),
+        ],
+      ),
     );
   }
 }
