@@ -22,14 +22,18 @@ class _DepositScreenState extends State<DepositScreen> {
 
   void makeDeposit() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        message = '';
+        errorMessage = '';
+      });
+
       try {
         await transactionService.depositMoney(userId, amount, description);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Deposit Pending"),
-            content: Text(
-                "Your deposit of $amount is pending approval. Once approved by the admin, your balance will be updated."),
+            title: Text("Deposit Successful"),
+            content: Text("Your deposit of \$${amount.toStringAsFixed(2)} has been processed."),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -40,19 +44,51 @@ class _DepositScreenState extends State<DepositScreen> {
         );
 
         setState(() {
-          message = 'Successfully deposited $amount for user $userId.';
-          errorMessage = '';
+          message = 'Successfully deposited \$${amount.toStringAsFixed(2)} for user $userId.';
           clearForm();
         });
       } catch (error) {
         setState(() {
-          errorMessage = 'An error occurred during the deposit. Please try again.';
-          message = '';
+          errorMessage = 'An error occurred during the deposit: $error';
         });
-        print(error);
       }
     }
   }
+
+
+  // void makeDeposit() async {
+  //   if (_formKey.currentState?.validate() ?? false) {
+  //     try {
+  //       await transactionService.depositMoney(userId, amount, description);
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           title: Text("Deposit Pending"),
+  //           content: Text(
+  //               "Your deposit of $amount is pending approval. Once approved by the admin, your balance will be updated."),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () => Navigator.pop(context),
+  //               child: Text("OK"),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //
+  //       setState(() {
+  //         message = 'Successfully deposited $amount for user $userId.';
+  //         errorMessage = '';
+  //         clearForm();
+  //       });
+  //     } catch (error) {
+  //       setState(() {
+  //         errorMessage = 'An error occurred during the deposit. Please try again.';
+  //         message = '';
+  //       });
+  //       print(error);
+  //     }
+  //   }
+  // }
 
   void clearForm() {
     setState(() {

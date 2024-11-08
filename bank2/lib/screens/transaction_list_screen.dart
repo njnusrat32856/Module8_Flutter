@@ -91,9 +91,10 @@ class _TransactionListScreenState extends State<TransactionListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Transaction List')),
-      body: FutureBuilder<List<Transaction>>(future: transactions, builder: (context, snapshot){
-
-      }),
+      body: Column(),
+      // body: FutureBuilder<List<Transaction>>(future: transactions, builder: (context, snapshot){
+      //
+      // }),
       // body: Padding(
       //   padding: const EdgeInsets.all(8.0),
       //   child: Column(

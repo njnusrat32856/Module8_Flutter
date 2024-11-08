@@ -53,22 +53,32 @@ class TransactionService {
       throw Exception('Failed to load user transactions');
     }
   }
-
   Future<void> depositMoney(int userId, double amount, String description) async {
-    final headers = await _getAuthHeaders();
-    final url = Uri.parse('${baseUrl}/deposit');
-    final params = {
-      'userId': userId.toString(),
-      'amount': amount.toString(),
-      'description': description,
-    };
+    final url = Uri.parse('$baseUrl/deposit?userId=$userId&amount=$amount&description=$description');
+    final response = await http.post(url);
 
-    final response = await http.post(url, body: json.encode(params), headers: headers);
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to deposit money');
+    if (response.statusCode == 200) {
+      print('Deposit successful: ${response.body}');
+    } else {
+      throw Exception('Failed to deposit: ${response.body}');
     }
   }
+
+  // Future<void> depositMoney(int userId, double amount, String description) async {
+  //   final headers = await _getAuthHeaders();
+  //   final url = Uri.parse('${baseUrl}/deposit');
+  //   final params = {
+  //     'userId': userId.toString(),
+  //     'amount': amount.toString(),
+  //     'description': description,
+  //   };
+  //
+  //   final response = await http.post(url, body: json.encode(params), headers: headers);
+  //
+  //   if (response.statusCode != 200) {
+  //     throw Exception('Failed to deposit money');
+  //   }
+  // }
 
   Future<void> transferMoney(int senderId, int receiverId, double amount, String description) async {
     final headers = await _getAuthHeaders();
