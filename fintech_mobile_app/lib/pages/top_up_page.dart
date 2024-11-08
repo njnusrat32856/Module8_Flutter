@@ -115,8 +115,12 @@ class _TopUpPageState extends State<TopUpPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(20))),
-                      builder: (context) =>
-                          TopUpBottomSheet(selectedProvider: selectedProvider));
+                      builder: (context) => TopUpBottomSheet(
+                          selectedProvider: selectedProvider,
+                          image: getImageForProvider(selectedProvider),
+                          account: getAccountForProvider(selectedProvider)
+                          ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -127,7 +131,8 @@ class _TopUpPageState extends State<TopUpPage> {
                 child: Text(
                   'Confirm',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ))
+                )
+            )
           ],
         ),
       ),
@@ -142,6 +147,23 @@ class _TopUpPageState extends State<TopUpPage> {
         return '**** **** **** 1990';
       default:
         return 'Easy Payment';
+    }
+  }
+
+  String getImageForProvider(String provider) {
+    switch (provider) {
+      case 'Bank of America':
+        return 'assets/bank_of_america.jpg';
+      case 'U.S. Bank':
+        return 'assets/us_bank.png';
+      case 'Paypal':
+        return 'assets/paypal.jpg';
+      case 'Apple Pay':
+        return 'assets/apple.png';
+      case 'Google Pay':
+        return 'assets/google.png';
+      default:
+        return 'assets/default.png';
     }
   }
 }
