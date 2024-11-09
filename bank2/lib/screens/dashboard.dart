@@ -46,6 +46,7 @@ class Dashboard extends StatelessWidget {
               ),
               Image.asset(
                 "assets/images/bankimage.jpg",
+                fit: BoxFit.cover,
               ),
               Expanded(
                 child: Stack(
