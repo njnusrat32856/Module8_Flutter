@@ -2,6 +2,8 @@
 // import 'package:fintech_mobile_app/pages/transfer_money.dart';
 import 'package:bank2/screens/deposit_screen.dart';
 import 'package:bank2/screens/transaction_list_screen.dart';
+import 'package:bank2/screens/transfer_screen.dart';
+import 'package:bank2/screens/withdraw_screen.dart';
 import 'package:flutter/material.dart';
 
 class ActionButtons extends StatelessWidget {
@@ -36,16 +38,21 @@ class ActionButtons extends StatelessWidget {
               icon: Icons.swap_horiz,
               label: 'Transfer',
               onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => TransferMoney())
-                // );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TransferScreen())
+                );
               },
             ),
             ActionButton(
               icon: Icons.attach_money,
               label: 'Withdraw',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WithdrawScreen()),
+                );
+              },
             ),
             ActionButton(
               icon: Icons.apps_sharp,

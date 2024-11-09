@@ -21,7 +21,7 @@ class Dashboard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Welcome Back!",
+                          "Welcome to BMSBank!",
                           style: TextStyle(color: Colors.white,fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
@@ -43,6 +43,9 @@ class Dashboard extends StatelessWidget {
                         )),
                   ],
                 ),
+              ),
+              Image.asset(
+                "assets/images/bankimage.jpg",
               ),
               Expanded(
                 child: Stack(

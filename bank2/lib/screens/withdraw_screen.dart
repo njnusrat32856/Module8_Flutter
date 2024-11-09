@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:bank2/services/transaction_service.dart';
 
-class DepositScreen extends StatefulWidget {
-  const DepositScreen({super.key});
+class WithdrawScreen extends StatefulWidget {
+  const WithdrawScreen({super.key});
 
   @override
-  State<DepositScreen> createState() => _DepositScreenState();
+  State<WithdrawScreen> createState() => _WithdrawScreenState();
 }
 
-class _DepositScreenState extends State<DepositScreen> {
+class _WithdrawScreenState extends State<WithdrawScreen> {
   final TransactionService transactionService = TransactionService();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
@@ -19,7 +19,7 @@ class _DepositScreenState extends State<DepositScreen> {
   String message = '';
   String errorMessage = '';
 
-  void makeDeposit() async {
+  void makeWithdrawal() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         isLoading = true;
@@ -28,14 +28,14 @@ class _DepositScreenState extends State<DepositScreen> {
       });
 
       try {
-        await transactionService.depositMoney(userId, amount, description);
+        await transactionService.withdrawMoney(userId, amount, description);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Deposit Successful"),
+            title: Text("Withdrawal Successful"),
             content: Text(
-              "Your deposit has been processed successfully.",
-              // "Your deposit of \$${amount.toStringAsFixed(2)} has been processed successfully.",
+              "Your withdrawal has been processed successfully.",
+              // "Your withdrawal of \$${amount.toStringAsFixed(2)} has been processed successfully.",
             ),
             actions: [
               TextButton(
@@ -47,12 +47,12 @@ class _DepositScreenState extends State<DepositScreen> {
         );
 
         setState(() {
-          message = 'Successfully deposited \$${amount.toStringAsFixed(2)} for user $userId.';
+          message = 'Successfully withdrew \$${amount.toStringAsFixed(2)} for user $userId.';
           clearForm();
         });
       } catch (error) {
         setState(() {
-          errorMessage = 'An error occurred during the deposit: $error';
+          errorMessage = 'An error occurred during the withdrawal: $error';
         });
       } finally {
         setState(() {
@@ -78,7 +78,7 @@ class _DepositScreenState extends State<DepositScreen> {
           onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back_ios_new),
         ),
-        title: Text("Deposit"),
+        title: Text("Withdraw"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -103,7 +103,7 @@ class _DepositScreenState extends State<DepositScreen> {
                 onChanged: (value) => amount = double.tryParse(value) ?? 0,
                 validator: (value) {
                   if (value == null || value.isEmpty || double.tryParse(value) == null || double.parse(value) <= 0) {
-                    return 'Deposit amount must be greater than zero.';
+                    return 'Withdrawal amount must be greater than zero.';
                   }
                   return null;
                 },
@@ -114,10 +114,10 @@ class _DepositScreenState extends State<DepositScreen> {
               ),
               SizedBox(height: 10.0),
               ElevatedButton(
-                onPressed: isLoading ? null : makeDeposit,
+                onPressed: isLoading ? null : makeWithdrawal,
                 child: isLoading
                     ? CircularProgressIndicator(color: Colors.white)
-                    : Text('Make Deposit'),
+                    : Text('Make Withdrawal'),
               ),
               if (errorMessage.isNotEmpty)
                 Padding(
@@ -144,123 +144,31 @@ class _DepositScreenState extends State<DepositScreen> {
 }
 
 
-
-// import 'package:bank2/services/transaction_service.dart';
 // import 'package:flutter/material.dart';
 //
-// class DepositScreen extends StatefulWidget {
-//   const DepositScreen({super.key});
+// class WithdrawScreen extends StatefulWidget {
+//   const WithdrawScreen({super.key});
 //
 //   @override
-//   State<DepositScreen> createState() => _DepositScreenState();
+//   State<WithdrawScreen> createState() => _WithdrawScreenState();
 // }
 //
-// class _DepositScreenState extends State<DepositScreen> {
-//
-//   final TransactionService transactionService = TransactionService();
-//
-//   int userId = 0;
-//   double amount = 0;
-//   String description = '';
-//   String message = '';
-//   String errorMessage = '';
-//
-//   final _formKey = GlobalKey<FormState>();
-//
-//   void makeDeposit() async {
-//     if (_formKey.currentState?.validate() ?? false) {
-//       setState(() {
-//         message = '';
-//         errorMessage = '';
-//       });
-//
-//       try {
-//         await transactionService.depositMoney(userId, amount, description);
-//         showDialog(
-//           context: context,
-//           builder: (context) => AlertDialog(
-//             title: Text("Deposit Successful"),
-//             content: Text("Your deposit of \$${amount.toStringAsFixed(2)} has been processed."),
-//             actions: [
-//               TextButton(
-//                 onPressed: () => Navigator.pop(context),
-//                 child: Text("OK"),
-//               ),
-//             ],
-//           ),
-//         );
-//
-//         setState(() {
-//           message = 'Successfully deposited \$${amount.toStringAsFixed(2)} for user $userId.';
-//           clearForm();
-//         });
-//       } catch (error) {
-//         setState(() {
-//           errorMessage = 'An error occurred during the deposit: $error';
-//         });
-//       }
-//     }
-//   }
-//
-//
-//   // void makeDeposit() async {
-//   //   if (_formKey.currentState?.validate() ?? false) {
-//   //     try {
-//   //       await transactionService.depositMoney(userId, amount, description);
-//   //       showDialog(
-//   //         context: context,
-//   //         builder: (context) => AlertDialog(
-//   //           title: Text("Deposit Pending"),
-//   //           content: Text(
-//   //               "Your deposit of $amount is pending approval. Once approved by the admin, your balance will be updated."),
-//   //           actions: [
-//   //             TextButton(
-//   //               onPressed: () => Navigator.pop(context),
-//   //               child: Text("OK"),
-//   //             ),
-//   //           ],
-//   //         ),
-//   //       );
-//   //
-//   //       setState(() {
-//   //         message = 'Successfully deposited $amount for user $userId.';
-//   //         errorMessage = '';
-//   //         clearForm();
-//   //       });
-//   //     } catch (error) {
-//   //       setState(() {
-//   //         errorMessage = 'An error occurred during the deposit. Please try again.';
-//   //         message = '';
-//   //       });
-//   //       print(error);
-//   //     }
-//   //   }
-//   // }
-//
-//   void clearForm() {
-//     setState(() {
-//       userId = 0;
-//       amount = 0;
-//       description = '';
-//     });
-//   }
-//
+// class _WithdrawScreenState extends State<WithdrawScreen> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
 //         leading: IconButton(
-//             onPressed: () => Navigator.pop(context),
-//             icon: Icon(Icons.arrow_back_ios_new)
+//           onPressed: () => Navigator.pop(context),
+//           icon: Icon(Icons.arrow_back_ios_new),
 //         ),
-//         title: Text("Transfer"),
+//         title: Text("Deposit"),
 //       ),
 //       body: Padding(
 //         padding: const EdgeInsets.all(8.0),
 //         child: Form(
 //           key: _formKey,
 //           child: Column(
-//             // crossAxisAlignment: CrossAxisAlignment.center,
 //             children: [
 //               TextFormField(
 //                 decoration: InputDecoration(labelText: 'User ID'),
@@ -290,8 +198,10 @@ class _DepositScreenState extends State<DepositScreen> {
 //               ),
 //               SizedBox(height: 10.0),
 //               ElevatedButton(
-//                 onPressed: makeDeposit,
-//                 child: Text('Make Deposit'),
+//                 onPressed: isLoading ? null : makeDeposit,
+//                 child: isLoading
+//                     ? CircularProgressIndicator(color: Colors.white)
+//                     : Text('Make Deposit'),
 //               ),
 //               if (errorMessage.isNotEmpty)
 //                 Padding(
@@ -299,6 +209,14 @@ class _DepositScreenState extends State<DepositScreen> {
 //                   child: Text(
 //                     errorMessage,
 //                     style: TextStyle(color: Colors.red),
+//                   ),
+//                 ),
+//               if (message.isNotEmpty)
+//                 Padding(
+//                   padding: const EdgeInsets.only(top: 8.0),
+//                   child: Text(
+//                     message,
+//                     style: TextStyle(color: Colors.green),
 //                   ),
 //                 ),
 //             ],

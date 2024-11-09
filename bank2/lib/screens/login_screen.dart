@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
         automaticallyImplyLeading: false, // Hides the back button
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 16, 80, 98),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),

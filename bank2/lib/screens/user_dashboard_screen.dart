@@ -25,12 +25,12 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
+        color: Colors.grey[350],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             tabItem(Icons.home, "Dashboard", 0),
-            tabItem(Icons.credit_card, "Loan Management", 1),
+            tabItem(Icons.credit_card, "Loan Details", 1),
             // tabItem(Icons.credit_card, "", 2),
             FloatingActionButton(
               onPressed: () => onTabTapped(2),
@@ -58,13 +58,13 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         children: [
           Icon(
             icon,
-            color: currentIndex == index ? Colors.black : Colors.grey,
+            color: currentIndex == index ? Colors.black : Colors.teal,
           ),
           Text(
             label,
             style: TextStyle(
               fontSize: 10,
-              color: currentIndex == index ? Theme.of(context).primaryColor : Colors.grey,
+              color: currentIndex == index ? Theme.of(context).primaryColor : Colors.teal,
             ),
           )
         ],

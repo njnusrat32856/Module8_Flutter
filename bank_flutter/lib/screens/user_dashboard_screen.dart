@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bank_flutter/models/user.dart';
-import 'package:bank_flutter/screens/deposit_screen.dart';
 import 'package:bank_flutter/screens/login_screen.dart';
 import 'package:bank_flutter/screens/user_profile.dart';
 import 'package:bank_flutter/services/transaction_service.dart';
@@ -18,11 +17,13 @@ class UserDashboardScreen extends StatefulWidget {
 }
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
-  late final User? user;
+  // late final User? user;
   // final String? errorMessage;
 
-  //for deposit
+
   final TransactionService transactionService = TransactionService();
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   int userId = 0;
   double amount = 0;
@@ -30,18 +31,25 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   String message = '';
   String errorMessage = '';
 
-  final _formKey = GlobalKey<FormState>();
-
+  //for deposit
   void makeDeposit() async {
-    if (_formKey.currentState!.validate() ?? false) {
+    if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        isLoading = true;
+        message = '';
+        errorMessage = '';
+      });
+
       try {
         await transactionService.depositMoney(userId, amount, description);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Deposit Pending"),
+            title: Text("Deposit Successful"),
             content: Text(
-                "Your deposit of $amount is pending approval. Once approved by the admin, your balance will be updated."),
+              "Your deposit has been processed successfully.",
+              // "Your deposit of \$${amount.toStringAsFixed(2)} has been processed successfully.",
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -52,16 +60,17 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         );
 
         setState(() {
-          message = 'Successfully deposited $amount for user $userId.';
-          errorMessage = '';
+          message = 'Successfully deposited \$${amount.toStringAsFixed(2)} for user $userId.';
           clearForm();
         });
       } catch (error) {
         setState(() {
-          errorMessage = 'An error occurred during the deposit. Please try again.';
-          message = '';
+          errorMessage = 'An error occurred during the deposit: $error';
         });
-        print(error);
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }
@@ -75,6 +84,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   }
   // end deposit
 
+  // design
   PageController pageController = PageController();
   SideMenuController sideMenu = SideMenuController();
 
@@ -117,10 +127,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               selectedColor: Colors.lightBlue,
               selectedTitleTextStyle: const TextStyle(color: Colors.white),
               selectedIconColor: Colors.white,
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.all(Radius.circular(10)),
-              // ),
-              // backgroundColor: Colors.grey[200]
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              backgroundColor: Colors.grey[200]
             ),
             title: Column(
               children: [
@@ -144,7 +154,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.lightBlue[50],
-                    borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12)
+                ),
                 child: Padding(
                   padding:
                   const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
@@ -177,14 +188,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               ),
               SideMenuExpansionItem(
                 title: "Transactions",
-                icon: const Icon(Icons.credit_card),
+                icon: const Icon(Icons.money_outlined),
                 children: [
                   SideMenuItem(
                     title: 'Deposit',
                     onTap: (index, _) {
                       sideMenu.changePage(index);
                     },
-                    icon: const Icon(Icons.save),
+                    icon: const Icon(Icons.account_balance),
                     // badgeContent: const Text(
                     //   '3',
                     //   style: TextStyle(color: Colors.white),
@@ -196,14 +207,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                     onTap: (index, _) {
                       sideMenu.changePage(index);
                     },
-                    icon: const Icon(Icons.money_off),
+                    icon: const Icon(Icons.attach_money),
                   ),
                   SideMenuItem(
                     title: 'Fund Transfer',
                     onTap: (index, _) {
                       sideMenu.changePage(index);
                     },
-                    icon: const Icon(Icons.send_rounded),
+                    icon: const Icon(Icons.swap_horiz),
                   ),
                 ],
               ),
@@ -315,7 +326,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Image.network(
-                            "https://t3.ftcdn.net/jpg/01/36/33/14/360_F_136331491_vRh0iHpvyi5juqXvbtujaibNIj6Xvyoh.jpg"),
+                            "https://t3.ftcdn.net/jpg/01/36/33/14/360_F_136331491_vRh0iHpvyi5juqXvbtujaibNIj6Xvyoh.jpg",
+                        ),
+                        SizedBox(height: 10,),
                         Text(
                           'Welcome to Bank!',
                           style: TextStyle(
@@ -388,6 +401,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                   //   ),
                   // ),
                 ),
+                // Transactions part --- deposit
                 Container(
                   padding: EdgeInsets.all(8),
                   color: Colors.white,  // Uncomment if you want a white background
@@ -397,10 +411,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       Center(
                         child: Text(
                           'Deposit',
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 5), // Space between title and DepositScreen
+                      SizedBox(height: 10), // Space between title and DepositScreen
                       // DepositScreen(userId: hashCode),
                       // DepositScreen(),
                       Padding(
@@ -408,7 +422,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         child: Form(
                           key: _formKey,
                           child: Column(
-                            // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               TextFormField(
                                 decoration: InputDecoration(labelText: 'User ID'),
@@ -438,8 +451,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                               ),
                               SizedBox(height: 10.0),
                               ElevatedButton(
-                                onPressed: makeDeposit,
-                                child: Text('Make Deposit'),
+                                onPressed: isLoading ? null : makeDeposit,
+                                child: isLoading
+                                    ? CircularProgressIndicator(color: Colors.white)
+                                    : Text('Make Deposit'),
                               ),
                               if (errorMessage.isNotEmpty)
                                 Padding(
@@ -447,6 +462,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                   child: Text(
                                     errorMessage,
                                     style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              if (message.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    message,
+                                    style: TextStyle(color: Colors.green),
                                   ),
                                 ),
                             ],
@@ -465,6 +488,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 //     ),
                 //   ),
                 // ),
+                // Transactions part --- withdraw
                 Container(
                   color: Colors.white,
                   child: const Center(
