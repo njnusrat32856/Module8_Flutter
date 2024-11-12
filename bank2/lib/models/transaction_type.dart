@@ -9,7 +9,7 @@ String transactionTypeToJson(TransactionType type) {
 }
 
 // Parse string to enum from JSON
-TransactionType transactionTypeFromJson(String type) {
+TransactionType transactionTypeFromJson(String? type) {
   switch (type) {
     case 'deposit':
       return TransactionType.deposit;
@@ -18,6 +18,8 @@ TransactionType transactionTypeFromJson(String type) {
     case 'fundTransfer':
       return TransactionType.fundTransfer;
     default:
+      print('Warning: Unknown transaction type "$type". Defaulting to "deposit".');
+      return TransactionType.deposit;
       throw Exception('Unknown transaction type');
   }
 }

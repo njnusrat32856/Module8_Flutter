@@ -1,5 +1,6 @@
 
 // import 'package:fintech_mobile_app/pages/transfer_money.dart';
+import 'package:bank2/screens/bank_statement_screen.dart';
 import 'package:bank2/screens/deposit_screen.dart';
 import 'package:bank2/screens/transaction_list_screen.dart';
 import 'package:bank2/screens/transfer_screen.dart';
@@ -60,7 +61,7 @@ class ActionButtons extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TransactionListScreen())
+                    MaterialPageRoute(builder: (context) => BankStatementScreen(userId: 2))
                 );
               },
             ),
