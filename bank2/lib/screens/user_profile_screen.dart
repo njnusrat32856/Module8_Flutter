@@ -99,7 +99,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(_user!.image),
+              // backgroundImage: NetworkImage(_user!.image, scale: 1.0),
               backgroundColor: Colors.black26,
             ),
             SizedBox(height: 10),
