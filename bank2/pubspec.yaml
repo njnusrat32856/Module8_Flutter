@@ -43,6 +43,7 @@ dependencies:
   google_fonts: ^4.0.1
   flutter_secure_storage: ^7.0.1
   easy_sidemenu: ^0.6.0
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

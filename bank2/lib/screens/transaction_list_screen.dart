@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:bank2/models/transaction.dart';
 import 'package:bank2/services/transaction_service.dart';
-import 'package:flutter/material.dart';
-
 
 class TransactionListScreen extends StatefulWidget {
   @override
@@ -9,154 +8,209 @@ class TransactionListScreen extends StatefulWidget {
 }
 
 class _TransactionListScreenState extends State<TransactionListScreen> {
-  final TransactionService transactionService = TransactionService();
-  late Future<List<Transaction>> transactions;
-  String errorMessage = '';
+  final TransactionService _transactionService = TransactionService();
+  late Future<List<Transaction>> _transactions;
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _transactions = _transactionService.getAllTransactions();
+  // }
   @override
   void initState() {
     super.initState();
-    // fetchTransactions();
-    transactions = transactionService.getTransactions();
+    _fetchTransactions();
   }
 
-  // Future<void> fetchTransactions() async {
-  //   try {
-  //     List<Transaction> fetchedTransactions = await transactionService.getTransactions();
-  //     setState(() {
-  //       transactions = fetchedTransactions;
-  //     });
-  //   } catch (error) {
-  //     setState(() {
-  //       errorMessage = 'Error fetching transaction data';
-  //     });
-  //     print(error);
-  //   }
-  // }
-  //
-  // Future<void> changeTransactionStatus(int transactionId, String status) async {
-  //   try {
-  //     await transactionService.updateTransactionStatus(transactionId, status);
-  //     setState(() {
-  //       transactions = transactions.map((transaction) {
-  //         if (transaction.id == transactionId) {
-  //           return transaction.copyWith(status: status);
-  //         }
-  //         return transaction;
-  //       }).toList();
-  //     });
-  //   } catch (error) {
-  //     setState(() {
-  //       errorMessage = 'Failed to update transaction status. Please try again.';
-  //     });
-  //     print(error);
-  //   }
-  // }
-  //
-  // Future<void> deleteTransaction(int transactionId) async {
-  //   bool confirmDelete = await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) => AlertDialog(
-  //       title: Text('Confirm Delete'),
-  //       content: Text('Are you sure you want to delete this transaction?'),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(false),
-  //           child: Text('Cancel'),
-  //         ),
-  //         TextButton(
-  //           onPressed: () => Navigator.of(context).pop(true),
-  //           child: Text('Delete'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  //
-  //   if (confirmDelete) {
-  //     try {
-  //       await transactionService.deleteTransaction(transactionId);
-  //       setState(() {
-  //         transactions.removeWhere((transaction) => transaction.id == transactionId);
-  //       });
-  //     } catch (error) {
-  //       setState(() {
-  //         errorMessage = 'Failed to delete transaction. Please try again.';
-  //       });
-  //       print(error);
-  //     }
-  //   }
-  // }
+  void _fetchTransactions() {
+    setState(() {
+      _transactions = _transactionService.getAllTransactions();
+    });
+  }
+
+  Future<void> _approveTransaction(Transaction transaction) async {
+    try {
+      await _transactionService.updateTransactionStatus(transaction.id, "Approved");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Transaction Approved")));
+      _fetchTransactions(); // Refresh the list after updating
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to approve transaction")));
+    }
+  }
+
+  Future<void> _denyTransaction(Transaction transaction) async {
+    try {
+      await _transactionService.updateTransactionStatus(transaction.id, "Denied");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Transaction Denied")));
+      _fetchTransactions(); // Refresh the list after updating
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to deny transaction")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Transaction List')),
-      body: Column(),
-      // body: FutureBuilder<List<Transaction>>(future: transactions, builder: (context, snapshot){
-      //
-      // }),
-      // body: Padding(
-      //   padding: const EdgeInsets.all(8.0),
-      //   child: Column(
-      //     children: [
-      //       if (errorMessage.isNotEmpty)
-      //         Text(
-      //           errorMessage,
-      //           style: TextStyle(color: Colors.red),
-      //         ),
-      //       transactions.isNotEmpty
-      //           ? Expanded(
-      //         child: ListView.builder(
-      //           itemCount: transactions.length,
-      //           itemBuilder: (context, index) {
-      //             final transaction = transactions[index];
-      //             return Card(
-      //               margin: const EdgeInsets.symmetric(vertical: 4),
-      //               child: ListTile(
-      //                 title: Text(
-      //                   'Transaction ID: ${transaction.id}',
-      //                   style: TextStyle(fontWeight: FontWeight.bold),
-      //                 ),
-      //                 subtitle: Column(
-      //                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                   children: [
-      //                     Text('Date: ${transaction.transactionDate}'),
-      //                     Text('Description: ${transaction.description}'),
-      //                     Text('Amount: \$${transaction.amount.toStringAsFixed(2)}'),
-      //                     Text('Transaction Type: ${transaction.transactionType}'),
-      //                     Text('Target Account: ${transaction.targetAccountNumber}'),
-      //                     Text('Status: ${transaction.status}'),
-      //                   ],
-      //                 ),
-      //                 // trailing: Column(
-      //                 //   children: [
-      //                 //     if (transaction.status == 'PENDING') ...[
-      //                 //       ElevatedButton(
-      //                 //         onPressed: () =>
-      //                 //             changeTransactionStatus(transaction.id, 'APPROVED'),
-      //                 //         child: Text('Approve'),
-      //                 //       ),
-      //                 //       ElevatedButton(
-      //                 //         onPressed: () =>
-      //                 //             changeTransactionStatus(transaction.id, 'DECLINED'),
-      //                 //         child: Text('Decline'),
-      //                 //       ),
-      //                 //     ] else if (transaction.status == 'APPROVED') ...[
-      //                 //       Text('Approved', style: TextStyle(color: Colors.green)),
-      //                 //     ] else if (transaction.status == 'DECLINED') ...[
-      //                 //       Text('Declined', style: TextStyle(color: Colors.red)),
-      //                 //     ],
-      //                 //   ],
-      //                 // ),
-      //               ),
-      //             );
-      //           },
-      //         ),
-      //       )
-      //           : Text('No transactions available.'),
-      //     ],
-      //   ),
-      // ),
+      appBar: AppBar(
+        leading: IconButton.outlined(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_ios_new),
+          color: Colors.white,
+        ),
+        title: Text(
+            "All Transactions",
+          style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 16, 80, 98),
+      ),
+      body: FutureBuilder<List<Transaction>>(
+        future: _transactions,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}", style: TextStyle(color: Colors.red)));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No transactions available"));
+          } else {
+            return ListView.builder(
+              padding: EdgeInsets.all(10),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final transaction = snapshot.data![index];
+                return _buildTransactionCard(transaction);
+              },
+            );
+          }
+        },
+      ),
     );
+  }
+
+  Widget _buildTransactionCard(Transaction transaction) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  _getIconForTransactionType(transaction.transactionType),
+                  color: _getColorForTransactionType(transaction.transactionType),
+                  // transaction.amount < 0 ? Icons.remove_circle : Icons.add_circle,
+                  // color: transaction.amount < 0 ? Colors.red : Colors.green,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  transaction.transactionType ?? 'Unknown',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              transaction.description,
+              style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Date: ${transaction.transactionDate}",
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                ),
+                Text(
+                  "\$${transaction.amount.toStringAsFixed(2)}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: transaction.amount < 0 ? Colors.red : Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _approveTransaction(transaction),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                      "Approve",
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () => _denyTransaction(transaction),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                      "Deny",
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  IconData _getIconForTransactionType(String? type) {
+    switch (type) {
+      case 'deposit':
+        return Icons.arrow_downward;
+      case 'withdraw':
+        return Icons.arrow_upward;
+      case 'fundTransfer':
+        return Icons.swap_horiz;
+      default:
+        return Icons.help_outline;
+    }
+  }
+
+  Color _getColorForTransactionType(String? type) {
+    switch (type) {
+      case 'deposit':
+        return Colors.green;
+      case 'withdraw':
+        return Colors.red;
+      case 'fundTransfer':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
   }
 }

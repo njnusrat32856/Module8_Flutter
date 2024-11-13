@@ -3,6 +3,7 @@ enum TransactionType {
   withdraw,
   fundTransfer,
 }
+
 // Convert enum to a string for JSON
 String transactionTypeToJson(TransactionType type) {
   return type.toString().split('.').last;
@@ -18,7 +19,8 @@ TransactionType transactionTypeFromJson(String? type) {
     case 'fundTransfer':
       return TransactionType.fundTransfer;
     default:
-      print('Warning: Unknown transaction type "$type". Defaulting to "deposit".');
+      print(
+          'Warning: Unknown transaction type "$type". Defaulting to "deposit".');
       return TransactionType.deposit;
       throw Exception('Unknown transaction type');
   }

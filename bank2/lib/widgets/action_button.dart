@@ -4,6 +4,7 @@ import 'package:bank2/screens/bank_statement_screen.dart';
 import 'package:bank2/screens/deposit_screen.dart';
 import 'package:bank2/screens/transaction_list_screen.dart';
 import 'package:bank2/screens/transfer_screen.dart';
+import 'package:bank2/screens/user_profile_screen.dart';
 import 'package:bank2/screens/withdraw_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -61,7 +62,8 @@ class ActionButtons extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BankStatementScreen(userId: 2))
+                    // MaterialPageRoute(builder: (context) => BankStatementScreen())
+                    MaterialPageRoute(builder: (context) => BankStatementScreen(userId: 3))
                 );
               },
             ),

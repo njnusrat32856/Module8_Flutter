@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bank2/models/transaction.dart';
 import 'package:bank2/services/auth_service.dart';
+import 'package:dio/dio.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -16,15 +17,31 @@ class TransactionService {
     };
   }
 
+  Future<List<Transaction>> getAllTransactions() async {
+    try {
+      final dio = Dio();
+      final response = await dio.get("http://localhost:8881/api/transactions/");
+
+      if (response.statusCode == 200) {
+        final data = response.data as List;
+        return data.map((json) => Transaction.fromJson(json)).toList();
+      } else {
+        throw Exception("Failed to load transactions: ${response.statusMessage}");
+      }
+    } on DioError catch (e) {
+      print("DioError: ${e.message}");
+      throw Exception("Failed to fetch transactions due to network error");
+    }
+  }
+
   Future<List<Transaction>> getTransactions() async {
-    final headers = await _getAuthHeaders();
-    final response = await http.get(Uri.parse('${baseUrl}/'), headers: headers);
+    final response = await http.get(Uri.parse('$baseUrl/'));
 
     print(response.statusCode);
 
     if (response.statusCode == 200) {
       final List<dynamic> transactionData = json.decode(response.body);
-      return transactionData.map((data) => Transaction.fromJson(data)).toList();
+      return transactionData.map((json) => Transaction.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load transactions');
     }
@@ -63,7 +80,7 @@ class TransactionService {
 
     if (response.statusCode == 200) {
       final List<dynamic> transactionData = json.decode(response.body);
-      print(response.body);
+      // print(response.body);
       return transactionData.map((data) => Transaction.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load user transactions');

@@ -5,10 +5,11 @@ class Transaction {
   final int id;
   final String transactionDate;
   final double amount;
-  final TransactionType transactionType; // deposit, withdraw, fund transfer
+  final String? transactionType; // deposit, withdraw, fund transfer
+  // final TransactionType transactionType; // deposit, withdraw, fund transfer
   final String description;
   final String targetAccountNumber;
-  final String status;
+  final String? status;
   final User userId;
 
   Transaction({
@@ -23,17 +24,20 @@ class Transaction {
   });
 
   // Factory constructor for creating a new Transaction instance from a JSON object
-  factory Transaction.fromJson(Map<String, dynamic> json) {
+  factory Transaction.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      throw Exception("Transaction data is null");
+    }
+
     return Transaction(
-      id: json['id'],
-      transactionDate: json['transactionDate'],
-      amount: json['amount'].toDouble(),
-      // transactionType: TransactionType.fromJson(json['transactionType']),
-      transactionType: transactionTypeFromJson(json['transactionType']),
-      description: json['description'],
-      targetAccountNumber: json['targetAccountNumber'],
-      status: json['status'],
-      userId: User.fromJson(json['userid']),
+      id: json['id'] ?? 0,
+      transactionDate: json['transactionDate'] ?? '',
+      amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
+      transactionType: json["transactionType"] ?? 'unknown',
+      description: json['description'] ?? 'No description available',
+      targetAccountNumber: json['targetAccountNumber'] ?? 'N/A',
+      status: json['status'] ?? 'pending',
+      userId: User.fromJson(json['userid'] ?? {}),
     );
   }
 
@@ -43,8 +47,9 @@ class Transaction {
       'id': id,
       'transactionDate': transactionDate,
       'amount': amount,
+      'transactionType': transactionType,
       // 'transactionType': transactionType.toJson(),
-      'transactionType': transactionTypeToJson(transactionType),
+      // 'transactionType': transactionTypeToJson(transactionType),
       'description': description,
       'targetAccountNumber': targetAccountNumber,
       'status': status,
